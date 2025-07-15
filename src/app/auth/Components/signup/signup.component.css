@@ -1,0 +1,38 @@
+.bg-primary {
+    background-color: #1c1c1c;
+}
+
+.container-div {
+    background: linear-gradient(80deg, #c8b33f, #d79b2b);
+}
+
+/* Password strength indicator styles */
+.password-strength-weak {
+    background-color: #ef4444; /* red */
+}
+
+.password-strength-medium {
+    background-color: #f59e0b; /* amber */
+}
+
+.password-strength-strong {
+    background-color: #3b82f6; /* blue */
+}
+
+.password-strength-very-strong {
+    background-color: #10b981; /* emerald */
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}

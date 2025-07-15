@@ -1,0 +1,30 @@
+
+<div class="w-full bg-gradient-to-r from-[#1E201E] to-[#3C3D37] py-5 px-4 md:px-6 flex justify-between items-center">
+  <!-- Left side - Logo/Brand -->
+  <div class="flex items-center">
+    <h1 class="text-lg md:text-xl italic font-bold text-gray-800 dark:text-gray-100">Welcome Admin !</h1>
+  </div>
+
+  <!-- Right side - Icons -->
+  <div class="flex items-center space-x-4 md:space-x-6">
+    <!-- Notification Icon -->
+    <button 
+      class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
+      aria-label="Notifications"
+    >
+      <i class="fas fa-bell text-white "></i>
+      <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+    </button>
+
+    <!-- Dark/Light Mode Toggle -->
+    <button 
+      (click)="toggleDarkMode()" 
+      class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+      aria-label="Toggle dark mode"
+    >
+      <i class="fas text-gray-600 dark:text-gray-300" 
+         [class.fa-moon]="!isDarkMode" 
+         [class.fa-sun]="isDarkMode"></i>
+    </button>
+  </div>
+</div>

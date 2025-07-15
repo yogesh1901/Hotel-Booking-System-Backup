@@ -1,0 +1,259 @@
+<div class="flex h-screen bg-gray-100 font-sans">
+  <!-- Main Content -->
+  <div class="flex-1 bg-[#ECDFCC] overflow-auto">
+    <!-- Manage Booking Section -->
+    <section class="p-6">
+      <div class="mb-6 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Manage Booking</h1>
+        <div class="relative">
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm" 
+            (input)="currentPage = 1"
+            placeholder="Search..." 
+            class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+          <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+        </div>
+      </div>
+      
+      <div *ngIf="loading" class="text-center py-8">
+        <i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i>
+        <p class="mt-2">Loading bookings...</p>
+      </div>
+      
+      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        {{ error }}
+      </div>
+      
+      <div *ngIf="!loading && !error" class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="responsive-table">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr class="bg-gradient-to-r from-[#41473f] to-[#90ad87]">
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CUSTOMER</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">ROOM TYPE</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">ROOM NO</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CHECK IN</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CHECK OUT</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">STATUS</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let booking of paginatedBookings">
+                <td class="px-6 py-4 whitespace-nowrap">{{ booking.bookingId }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ booking.customer }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ booking.roomType }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ booking.roomNumber }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ formatDate(booking.checkIn) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ formatDate(booking.checkOut) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full" 
+                        [class]="getStatusClass(booking.status)">
+                    {{ booking.status }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                  <button (click)="openEditModal(booking)" class="text-blue-600 hover:text-blue-900">Edit</button>
+                  <button (click)="openViewModal(booking)" class="text-blue-600 hover:text-blue-900">View</button>
+                  <button (click)="printBooking()" class="text-blue-600 hover:text-blue-900">Print</button>
+                  <button (click)="deleteBooking(booking)" class="text-red-600 hover:text-red-900">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div *ngIf="filteredBookings.length === 0 && !loading" class="px-6 py-4 text-center text-gray-500">
+          No bookings found matching your search criteria.
+        </div>
+        
+        <div *ngIf="filteredBookings.length > 0" class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+          <p class="text-sm text-gray-700">
+            Showing <span class="font-medium">{{ (currentPage - 1) * itemsPerPage + 1 }}</span> 
+            to <span class="font-medium">{{ getMin(currentPage * itemsPerPage, filteredBookings.length) }}</span> 
+            of <span class="font-medium">{{ filteredBookings.length }}</span> results
+          </p>
+          <nav class="pagination" *ngIf="totalPages > 1">
+            <ul class="flex space-x-1">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="changePage(currentPage - 1)" [class.pointer-events-none]="currentPage === 1">Previous</a>
+              </li>
+              <li *ngFor="let page of [].constructor(totalPages); let i = index" 
+                  class="page-item" [class.active]="currentPage === i + 1">
+                <a class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="changePage(currentPage + 1)" [class.pointer-events-none]="currentPage === totalPages">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- View Modal -->
+<div *ngIf="showViewModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-xl w-[90%] max-w-lg shadow-xl relative">
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl">×</button>
+    <h2 class="text-xl font-bold mb-4">Booking Details {{ currentBooking.bookingId }}</h2>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="font-bold text-gray-700">Customer:</p>
+        <p>{{ currentBooking.customer }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Room Type:</p>
+        <p>{{ currentBooking.roomType }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Room Number:</p>
+        <p>{{ currentBooking.roomNumber }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Check In:</p>
+        <p>{{ formatDate(currentBooking.checkIn) }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Check Out:</p>
+        <p>{{ formatDate(currentBooking.checkOut) }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Status:</p>
+        <p>{{ currentBooking.status }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Guests:</p>
+        <p>{{ currentBooking.guests }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Special Requests:</p>
+        <p>{{ currentBooking.requests || 'None' }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Aadhar Number:</p>
+        <p>{{ currentBooking.aadharNumber }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Mobile Number:</p>
+        <p>{{ currentBooking.mobileNumber }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Total Amount:</p>
+        <p>₹{{ currentBooking.amount }}</p>
+      </div>
+    </div>
+    <div class="flex justify-end space-x-2">
+      <button (click)="printBooking()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Print</button>
+      <button (click)="closeModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div *ngIf="showEditModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-xl w-[90%] max-w-lg shadow-xl relative">
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl">×</button>
+    <h2 class="text-xl font-bold mb-4">Edit Booking {{ currentBooking.bookingId }}</h2>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="font-bold text-gray-700">Customer:</p>
+        <p>{{ currentBooking.customer }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Room Type:</p>
+        <p>{{ currentBooking.roomType }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Current Room Number:</p>
+        <p>{{ currentBooking.roomNumber }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Check In:</p>
+        <p>{{ formatDate(currentBooking.checkIn) }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Check Out:</p>
+        <p>{{ formatDate(currentBooking.checkOut) }}</p>
+      </div>
+      <div>
+        <p class="font-bold text-gray-700">Status:</p>
+        <p>{{ currentBooking.status }}</p>
+      </div>
+    </div>
+    <form (ngSubmit)="updateBooking()" class="space-y-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="editRoomNumber">New Room Number</label>
+        <input 
+          id="editRoomNumber" 
+          [(ngModel)]="currentBooking.roomNumber" 
+          name="roomNumber" 
+          type="text" 
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        >
+      </div>
+        <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="editStatus">Status</label>
+        <select id="editStatus" [(ngModel)]="currentBooking.status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          <option value="confirmed">Confirmed</option>
+          <option value="cancelled">Cancelled</option>
+          <!-- <option value="checked in">Checked In</option>
+          <option value="checked out">Checked Out</option> -->
+        </select>
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="editAdminMessage">Admin Message</label>
+        <textarea id="editAdminMessage" [(ngModel)]="currentBooking.response" name="response" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button type="button" (click)="closeModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Add this at the bottom of managebooking.component.html -->
+<!-- Confirmation Modal -->
+<div *ngIf="showConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Confirm Action</h2>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="mb-6">
+        <p class="text-gray-700">{{ confirmationMessage }}</p>
+      </div>
+      
+      <div class="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          (click)="closeModal()"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          (click)="confirmAction()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Message -->
+<div *ngIf="showToast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+  {{ toastMessage }}
+</div>

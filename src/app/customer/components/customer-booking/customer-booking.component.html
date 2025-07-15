@@ -1,0 +1,333 @@
+<!-- Cancel Terms Modal -->
+<div *ngIf="showCancelTermsModal" class="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 p-8 relative overflow-y-auto max-h-[90vh]">
+    <button (click)="cancelCancelBooking()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Booking Cancellation Terms & Conditions</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <p class="text-gray-700 mb-4">By cancelling, you agree to the following:</p>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li>Cancellation is only allowed before the check-in date.</li>
+        <li>Cancellation fee is 30% of the original booking amount.</li>
+        <li>Refund amount is 70% of the original booking amount.</li>
+        <li>Status will be updated to 'cancelled' and booking marked as cancelled.</li>
+      </ul>
+    </div>
+    <div class="flex justify-end space-x-2">
+      <button (click)="cancelCancelBooking()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+      <button (click)="confirmCancelBooking()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Confirm</button>
+    </div>
+  </div>
+</div>
+<!-- customer-booking.component.html -->
+<div class="min-h-screen bg-black">
+  <div class="p-6">
+     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+       <h1 class="text-2xl text-white font-bold">Manage Bookings</h1>
+       <div class="flex flex-col sm:flex-row gap-2">
+         <a routerLink="/">
+           <button class="px-4 py-2 bg-gradient-to-r from-[#ffdfbe] to-[#997650] text-black rounded-3xl hover:bg-[#FFD54F] transition flex items-center">
+             <i class="fas fa-home mr-2 mb-1"></i> Back to Home
+            </button>
+          </a>
+          
+        </div>
+      </div>
+      
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap gap-2 mb-6">
+  <button 
+  [class.bg-black]="filter() === 'all'"
+  [class.text-white]="filter() === 'all'"
+  [class.bg-gray-200]="filter() !== 'all'"
+  class="px-4 py-2 rounded transition" 
+  (click)="setFilter('all')">
+  All Bookings
+</button>
+<button 
+[class.bg-black]="filter() === 'upcoming'"
+[class.text-white]="filter() === 'upcoming'"
+[class.bg-gray-200]="filter() !== 'upcoming'"
+class="px-4 py-2 rounded transition" 
+    (click)="setFilter('upcoming')">
+    Upcoming
+  </button>
+  <button 
+  [class.bg-black]="filter() === 'past'"
+  [class.text-white]="filter() === 'past'"
+  [class.bg-gray-200]="filter() !== 'past'"
+  class="px-4 py-2 rounded transition" 
+  (click)="setFilter('past')">
+  Past
+</button>
+<button 
+[class.bg-black]="filter() === 'cancelled'"
+[class.text-white]="filter() === 'cancelled'"
+[class.bg-gray-200]="filter() !== 'cancelled'"
+class="px-4 py-2 rounded transition" 
+(click)="setFilter('cancelled')">
+Cancelled
+</button>
+</div>
+
+<div class="space-y-4">
+  <!-- Current Date Indicator -->
+  <div class="text-sm text-gray-500 mb-2">
+    <i class="far fa-calendar-alt mr-1"></i> Today: {{ formatDate(today) }}
+  </div>
+  
+  <!-- Booking Cards -->
+  @for (booking of filteredBookings(); track booking.id) {
+    <div class="booking-card bg-white/10 backdrop-blur-md border-l-4 rounded-lg shadow overflow-hidden text-white"
+    [class.border-amber-400]="booking.status === 'confirmed'"
+    [class.border-green-500]="booking.status === 'completed'"
+    [class.border-red-500]="booking.status === 'cancelled'">
+    
+    <div class="flex justify-between items-center bg-white/10 backdrop-blur-md border-b border-white/20 text-white p-4">
+      <div class="font-semibold">
+        <i class="fas fa-hotel mr-2"></i> {{ booking.roomType }} @if (booking.roomNumber) { (Room {{ booking.roomNumber }}) }
+      </div>
+      <div class="flex items-center space-x-2">
+        @if (booking.checkIn <= today && booking.checkOut >= today && booking.status === 'confirmed') {
+          <span class="bg-blue-500 text-white px-2 py-1 rounded text-xs">
+            <i class="fas fa-hourglass-half mr-1"></i> Ongoing
+          </span>
+        }
+        <span class="px-2 py-1 rounded text-sm font-medium" [ngClass]="getStatusClass(booking.status)" style="color:white;">
+          <i class="fas {{ getStatusIcon(booking.status) }} mr-1"></i> 
+          {{ booking.status | titlecase }}
+        </span>
+      </div>
+    </div>
+    
+    <div class="p-6 text-white">
+      @if (booking.adminMessage) {
+        <div class="mb-4 p-3 bg-yellow-100/20 text-yellow-200 rounded">
+          <i class="fas fa-info-circle mr-2"></i> {{ booking.adminMessage }}
+        </div>
+      }
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
+          <div class="text-white/80 mb-1">
+            <i class="far fa-calendar-check mr-1"></i> Check In
+          </div>
+          <div class="font-medium text-white">{{ formatDate(booking.checkIn) }}</div>
+        </div>
+        <div>
+          <div class="text-white/80 mb-1">
+            <i class="far fa-calendar-times mr-1"></i> Check Out
+          </div>
+          <div class="font-medium text-white">{{ formatDate(booking.checkOut) }}</div>
+        </div>
+        <div>
+          <div class="text-white/80 mb-1">
+            <i class="fas fa-users mr-1"></i> Guests
+          </div>
+          <div class="font-medium text-white">{{ booking.guests }}</div>
+        </div>
+      </div>
+      
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="text-white/80 mb-1">
+            <i class="fas fa-rupee-sign mr-1"></i> Total Amount
+          </div>
+          <div class="flex items-center text-white">
+            <span class="mr-1">₹</span>
+            <span class="text-xl font-bold">{{ booking.amount.toLocaleString('en-IN') }}</span>
+          </div>
+        </div>
+        <div class="flex space-x-2">
+          <button class="px-3 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition flex items-center"
+          (click)="viewDetails(booking)">
+          <i class="fas fa-eye mr-1"></i> View Details
+        </button>
+        @if (booking.status === 'confirmed' && booking.cancelBooking === false) {
+          <!-- Modify Button -->
+          <ng-container *ngIf="canModifyBooking(booking); else modifyDisabled">
+            <button class="px-3 py-1 bg-amber-100 text-amber-800 rounded hover:bg-amber-200 transition flex items-center"
+            (click)="openModifyModal(booking)">
+            <i class="fas fa-edit mr-1"></i> Modify
+          </button>
+        </ng-container>
+        <ng-template #modifyDisabled>
+          <button class="px-3 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition flex items-center" disabled>
+            <i class="fas fa-edit mr-1"></i> Modify
+          </button>
+        </ng-template>
+        
+        <!-- Cancel Button -->
+        <ng-container *ngIf="canCancelBooking(booking); else cancelDisabled">
+          <button class="px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 transition flex items-center"
+          (click)="openCancelTermsModal(booking)">
+          <i class="fas fa-times mr-1"></i> Cancel
+        </button>
+      </ng-container>
+      <ng-template #cancelDisabled>
+        <button class="px-3 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition flex items-center" disabled>
+          <i class="fas fa-times mr-1"></i> Cancel
+        </button>
+      </ng-template>
+    }
+    @if (booking.status !== 'confirmed' || booking.cancelBooking === true) {
+      <button class="px-3 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition flex items-center" disabled>
+        <i class="fas fa-edit mr-1"></i> Modify
+      </button>
+      <button class="px-3 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition flex items-center" disabled>
+        <i class="fas fa-times mr-1"></i> Cancel
+      </button>
+    }
+  </div>
+</div>
+</div>
+</div>
+}
+@empty {
+  <div class="text-center py-8 text-white/80">
+    <i class="fas fa-calendar-times fa-3x mb-4"></i>
+    <p class="text-xl text-white">No bookings found for this filter</p>
+    </div>
+  }
+</div>
+</div>
+<!-- View Details Modal -->
+@if (showViewModal && selectedBooking) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg w-full max-w-2xl text-white">
+      <div class="flex justify-between items-center border-b border-white/20 p-4">
+        <h3 class="text-xl font-bold text-white">Booking Details</h3>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="p-6 text-white">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <h4 class="font-bold mb-2 text-white">Room Information</h4>
+            <p><span class="text-white/80">Type:</span> {{ selectedBooking.roomType }}</p>
+            <p><span class="text-white/80">Room Number:</span> {{ selectedBooking.roomNumber || 'Not assigned' }}</p>
+          </div>
+          <div>
+            <h4 class="font-bold mb-2 text-white">Dates</h4>
+            <p><span class="text-white/80">Check In:</span> {{ formatDate(selectedBooking.checkIn) }}</p>
+            <p><span class="text-white/80">Check Out:</span> {{ formatDate(selectedBooking.checkOut) }}</p>
+          </div>
+          <div>
+            <h4 class="font-bold mb-2 text-white">Guests</h4>
+            <p>{{ selectedBooking.guests }}</p>
+          </div>
+          <div>
+            <h4 class="font-bold mb-2 text-white">Status</h4>
+            <span class="px-3 py-1 rounded text-sm font-medium" [ngClass]="getStatusClass(selectedBooking.status)">
+              {{ selectedBooking.status | titlecase }}
+            </span>
+          </div>
+        </div>
+        <div class="border-t pt-4">
+          <h4 class="font-bold mb-2 text-white">Payment Information</h4>
+          <p><span class="text-white/80">Total Amount:</span> ₹{{ selectedBooking.amount.toLocaleString('en-IN') }}</p>
+        </div>
+        @if (selectedBooking.adminMessage) {
+          <div class="mt-4 p-3 bg-yellow-100/20 text-yellow-200 rounded">
+            <i class="fas fa-info-circle mr-2"></i> {{ selectedBooking.adminMessage }}
+          </div>
+        }
+      </div>
+      <div class="border-t border-white/20 p-4 flex justify-between">
+        <button (click)="printBooking(selectedBooking)" class="px-4 py-2 bg-white/10 text-white rounded hover:bg-white/20 transition">
+          <i class="fas fa-print mr-2"></i> Print Receipt
+        </button>
+        <button (click)="closeModal()" class="px-4 py-2 bg-black text-white rounded hover:bg-white/20 transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modify Booking Modal -->
+@if (showModifyModal && selectedBooking) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg w-full max-w-2xl text-white">
+      <div class="flex justify-between items-center border-b border-white/20 p-4">
+        <h3 class="text-xl font-bold text-white">Modify Booking</h3>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="p-6 text-white">
+        <form (ngSubmit)="submitModificationRequest()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-white/80 mb-2">Room Type</label>
+              <select [(ngModel)]="modificationRequest.roomType" name="roomType" class="w-full p-2 border rounded bg-white/10 text-white" (change)="onModifyFieldChange()">
+                <option *ngFor="let type of roomTypes" [value]="type">{{ type }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-white/80 mb-2">Room Number</label>
+              <select [(ngModel)]="modificationRequest.roomNumber" name="roomNumber" class="w-full p-2 border rounded bg-white/10 text-white">
+                <option value="">Select Room</option>
+                <option *ngFor="let num of availableRoomNumbers" [value]="num">{{ num }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-white/80 mb-2">Check In Date</label>
+              <input [(ngModel)]="modificationRequest.checkIn" name="checkIn" type="date" 
+                     [min]="formatDateForInput(today)" class="w-full p-2 border rounded bg-white/10 text-white" (change)="onModifyFieldChange()">
+            </div>
+            <div>
+              <label class="block text-white/80 mb-2">Check Out Date</label>
+              <input [(ngModel)]="modificationRequest.checkOut" name="checkOut" type="date" 
+                     [min]="modificationRequest.checkIn || formatDateForInput(today)" class="w-full p-2 border rounded bg-white/10 text-white" (change)="onModifyFieldChange()">
+            </div>
+            <div>
+              <label class="block text-white/80 mb-2">Adults</label>
+              <input [(ngModel)]="modificationRequest.adults" name="adults" type="number" min="1" max="10" class="w-full p-2 border rounded bg-white/10 text-white" required>
+            </div>
+            <div>
+              <label class="block text-white/80 mb-2">Children</label>
+              <input [(ngModel)]="modificationRequest.children" name="children" type="number" min="0" max="10" class="w-full p-2 border rounded bg-white/10 text-white">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-white/80 mb-2">Additional Notes</label>
+            <textarea [(ngModel)]="modificationRequest.message" name="message" rows="3" class="w-full p-2 border rounded bg-white/10 text-white"></textarea>
+          </div>
+          <div class="border-t pt-4 flex justify-end space-x-2">
+            <button type="button" (click)="closeModal()" class="px-4 py-2 bg-white/10 text-white rounded hover:bg-white/20 transition">
+              Cancel
+            </button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Confirmation Modal -->
+<!-- In your customer-booking.component.html -->
+@if (showConfirmModal) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg w-full max-w-md text-white">
+      <div class="border-b border-white/20 p-4">
+        <h3 class="text-xl font-bold text-white">{{ modalTitle }}</h3>
+      </div>
+      <div class="p-6 text-white">
+        <p>{{ modalMessage }}</p>
+      </div>
+      <div class="border-t border-white/20 p-4 flex justify-end space-x-2">
+        <button (click)="closeModal()" class="px-4 py-2 bg-white/10 text-white rounded hover:bg-white/20 transition">
+          Cancel
+        </button>
+        <button (click)="confirmActionHandler()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+}
+</div>

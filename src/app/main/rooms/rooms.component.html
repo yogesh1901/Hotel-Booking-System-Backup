@@ -1,0 +1,60 @@
+<section class="py-12 bg-[#f8f3e7]">
+  <div class="container mx-auto px-4">
+    <div class="text-center">
+      <h2 class="text-3xl md:text-4xl font-bold italic mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#000000] to-[#000000]">Popular Room Types</h2>
+      <p class="text-[#1c1c1c] text-xl mb-8 max-w-2xl mx-auto">Choose from our selection of beautifully appointed rooms and suites</p>
+    </div>
+    
+    <!-- First Row of Rooms -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div *ngFor="let room of firstRowRooms" class="bg-[#1c1c1c] text-white rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <img [src]="room.image" [alt]="room.type" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b]">{{room.type}}</h3>
+            <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b]">{{room.price}}/night</span>
+          </div>
+          <p class="text-md mb-4">{{room.description}}</p>
+          <div class="flex justify-between items-center">
+            <div class="flex text-transparent bg-clip-text bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b]">
+              <i *ngFor="let star of [1,2,3,4,5]" class="fas" 
+                 [class.fa-star]="star <= room.rating" 
+                 [class.fa-star-half-alt]="star > room.rating && star - 0.5 === room.rating"></i>
+            </div>
+            <a [routerLink]="['/room-booking']">
+              <button class="bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b] text-[#1c1c1c] font-bold rounded-full px-4 py-2 hover:from-[#d79b2b] hover:to-[#e7cf4b] hover:-translate-y-0.5 transition-all duration-300">
+                Book Now
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Second Row of Rooms -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div *ngFor="let room of secondRowRooms" class="bg-[#1c1c1c] text-white rounded-lg overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <img [src]="room.image" [alt]="room.type" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b]">{{room.type}}</h3>
+            <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b]">{{room.price}}/night</span>
+          </div>
+          <p class="text-md mb-4">{{room.description}}</p>
+          <div class="flex justify-between items-center">
+            <div class="flex text-transparent bg-clip-text bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b]">
+              <i *ngFor="let star of [1,2,3,4,5]" class="fas" 
+                 [class.fa-star]="star <= room.rating" 
+                 [class.fa-star-half-alt]="star > room.rating && star - 0.5 === room.rating"></i>
+            </div>
+            <a [routerLink]="['/room-booking']">
+              <button class="bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b] text-[#1c1c1c] font-bold rounded-full px-4 py-2 hover:from-[#d79b2b] hover:to-[#e7cf4b] hover:-translate-y-0.5 transition-all duration-300">
+                Book Now
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

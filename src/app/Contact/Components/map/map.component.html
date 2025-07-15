@@ -1,0 +1,88 @@
+<div class="relative z-10">
+  <section id="map" class="h-screen w-full flex flex-col">
+    <div class="container mx-auto px-4 pt-8">
+      <!-- Back button -->
+      <button 
+      routerLink="/" 
+      class="flex items-center text-black mb-4 transition-colors z-10 relative">
+      <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      class="h-5 w-5 mr-2" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-medium">Back to Home</span>
+    </button>
+  </div>
+  
+  <div class="flex-grow flex flex-col">
+    <!-- Header matching Contact page style -->
+    <h2 class="text-center text-black text-3xl md:text-4xl font-playfair italic mb-4 px-4">
+      Our Location
+    </h2>
+    
+    <div class="flex flex-col  md:flex-row gap-4 h-full px-4 pb-4">
+      <!-- Left Column - Contact Info (same as contact page) -->
+      <div class="  md:w-1/3 bg-[#222222] rounded-md p-6 overflow-y-auto">
+        <h3 class="text-white text-xl md:text-2xl font-cormorant italic mb-4">
+          Visit Us
+        </h3>
+        
+        <div class="space-y-4 font-lora text-[#f8b84e] mb-6">
+          <div class="flex items-start">
+            <svg class="w-5 h-5 mt-1 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <p class="text-white">Rs puram, Coimbatore - 641002</p>
+          </div>
+          
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <p class="text-white">+91 9677440158</p>
+          </div>
+          
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <p class="text-white">info&#64;bookmyhotel.com</p>
+          </div>
+        </div>
+        
+        <!-- <h4 class="text-[#f8b84e] font-lora mb-3">Opening Hours:</h4>
+        <ul class="font-lora text-white space-y-2">
+          <li class="flex justify-between">
+            <span>Monday - Friday</span>
+            <span>9:00 AM - 9:00 PM</span>
+          </li>
+          <li class="flex justify-between">
+            <span>Saturday - Sunday</span>
+            <span>10:00 AM - 8:00 PM</span>
+          </li>
+        </ul> -->
+      </div>
+      <!-- Right Column - Map -->
+      <div class=" md:w-2/3  bg-[#222222] rounded-md overflow-hidden flex-grow">
+        <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.123456789012!2d76.987654321!3d11.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDA3JzI0LjQiTiA3NsKwNTknMTUuNiJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin" 
+        width="100%" 
+        height="100%" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade"
+        class="grayscale-[50%] sepia-[10%]">
+      </iframe>
+    </div>
+  </div>
+</div>
+</section>
+</div>
+<div class="fixed inset-0  h-full z-0">
+  <img src="assets/image2.jpg" alt="Background" class="w-full h-full object-cover " />
+</div>

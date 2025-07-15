@@ -1,0 +1,272 @@
+<div class="flex h-screen bg-gray-100 font-sans">
+  <!-- Main Content -->
+  <div class="flex-1 bg-[#ECDFCC] overflow-auto">
+    <section class="p-6">
+      <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h1 class="text-2xl font-bold">Manage Feedback</h1>
+        <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+          <div class="relative w-full md:w-64">
+            <input 
+              type="text" 
+              placeholder="Search feedback..." 
+              class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              (input)="performSearch($any($event.target).value)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gradient-to-r from-[#41473f] to-[#90ad87]">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Booking ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Room Number</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rating/5</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Comments</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <ng-container *ngFor="let feedback of getFeedbacksToShow(); let i = index">
+                <tr *ngIf="feedback; else emptyRow" [class.opacity-50]="feedback.isBlocked">
+                  <td class="px-6 py-4 whitespace-nowrap">{{ feedback.id }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {{ feedback.name }}
+                    <span *ngIf="feedback.isBlocked" class="ml-2 text-xs text-red-600">(Blocked)</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">{{ feedback.roomNumber }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <span class="text-yellow-400">{{ renderStars(feedback.rating) }}</span>
+                      <span class="ml-1">{{ feedback.rating }}/5</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">{{ feedback.comments }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span 
+                      class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                      [class.bg-blue-100]="feedback.status === 'Pending'"
+                      [class.text-blue-800]="feedback.status === 'Pending'"
+                      [class.bg-green-100]="feedback.status === 'Responded'"
+                      [class.text-green-800]="feedback.status === 'Responded'">
+                      {{ feedback.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                    <button 
+                      (click)="openResponseModal(feedback)"
+                      class="text-blue-600 hover:text-blue-900"
+                      [disabled]="feedback.status === 'Responded' || feedback.isBlocked"
+                      [class.opacity-50]="feedback.status === 'Responded' || feedback.isBlocked"
+                      [class.cursor-not-allowed]="feedback.status === 'Responded' || feedback.isBlocked">
+                      Respond
+                    </button>
+                    <button 
+                      *ngIf="!feedback.isBlocked"
+                      (click)="blockUser(feedback)"
+                      class="text-yellow-600 hover:text-yellow-900">
+                      Block User
+                    </button>
+                    <button 
+                      *ngIf="feedback.isBlocked"
+                      (click)="unblockUser(feedback)"
+                      class="text-green-600 hover:text-green-900">
+                      Unblock User
+                    </button>
+                    <button 
+                      (click)="deleteFeedback(feedback)"
+                      class="text-red-600 hover:text-red-900">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+                <ng-template #emptyRow>
+                  <tr *ngIf="i < 5">
+                    <td class="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+                    <td class="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+                    <td class="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+                    <td class="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+                    <td class="px-6 py-4">&nbsp;</td>
+                    <td class="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+                    <td class="px-6 py-4 whitespace-nowrap">&nbsp;</td>
+                  </tr>
+                </ng-template>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-700">
+              {{ updateResultsInfo() }}
+            </p>
+          </div>
+          <nav class="flex" *ngIf="getTotalPages() > 1">
+            <ul class="flex space-x-2">
+              <li>
+                <button 
+                  (click)="changePage(currentPage - 1)"
+                  [disabled]="currentPage === 1"
+                  class="px-3 py-1 border rounded"
+                  [class.text-gray-400]="currentPage === 1"
+                  [class.cursor-not-allowed]="currentPage === 1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              </li>
+              
+              <ng-container *ngIf="getPaginationRange().startPage > 1">
+                <li>
+                  <button 
+                    (click)="changePage(1)"
+                    class="px-3 py-1 border rounded"
+                    [class.bg-blue-600]="currentPage === 1"
+                    [class.text-white]="currentPage === 1">
+                    1
+                  </button>
+                </li>
+                <li *ngIf="getPaginationRange().startPage > 2" class="px-3 py-1">...</li>
+              </ng-container>
+              
+              <ng-container *ngFor="let page of getPageNumbers(getPaginationRange().startPage, getPaginationRange().endPage)">
+                <li>
+                  <button 
+                    (click)="changePage(page)"
+                    class="px-3 py-1 border rounded"
+                    [class.bg-blue-600]="currentPage === page"
+                    [class.text-white]="currentPage === page">
+                    {{ page }}
+                  </button>
+                </li>
+              </ng-container>
+              
+              <ng-container *ngIf="getPaginationRange().endPage < getPaginationRange().totalPages">
+                <li *ngIf="getPaginationRange().endPage < getPaginationRange().totalPages - 1" class="px-3 py-1">...</li>
+                <li>
+                  <button 
+                    (click)="changePage(getPaginationRange().totalPages)"
+                    class="px-3 py-1 border rounded"
+                    [class.bg-blue-600]="currentPage === getPaginationRange().totalPages"
+                    [class.text-white]="currentPage === getPaginationRange().totalPages">
+                    {{ getPaginationRange().totalPages }}
+                  </button>
+                </li>
+              </ng-container>
+              
+              <li>
+                <button 
+                  (click)="changePage(currentPage + 1)"
+                  [disabled]="currentPage === getTotalPages()"
+                  class="px-3 py-1 border rounded"
+                  [class.text-gray-400]="currentPage === getTotalPages()"
+                  [class.cursor-not-allowed]="currentPage === getTotalPages()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Response Modal -->
+<div *ngIf="showResponseModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Respond to Feedback</h2>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div *ngIf="selectedFeedback" class="mb-4">
+        <p class="font-medium">Feedback from: {{ selectedFeedback.name }}</p>
+        <p class="text-gray-600 mt-1">{{ selectedFeedback.comments }}</p>
+        <div *ngIf="selectedFeedback.response" class="mt-2 p-2 bg-gray-100 rounded">
+          <p class="font-medium">Previous Response:</p>
+          <p class="text-gray-700">{{ selectedFeedback.response }}</p>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="response">Your Response</label>
+        <textarea 
+          id="response" 
+          [(ngModel)]="responseText"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"
+          placeholder="Type your response here..."></textarea>
+      </div>
+      
+      <div class="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          (click)="closeModal()"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          (click)="submitResponse()"
+          [disabled]="!responseText.trim()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50">
+          Submit Response
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Confirm Action</h2>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="mb-6">
+        <p class="text-gray-700">{{ confirmationMessage }}</p>
+      </div>
+      
+      <div class="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          (click)="closeModal()"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          (click)="actionCallback(); closeModal()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Message -->
+<div *ngIf="showToast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+  {{ toastMessage }}
+</div>

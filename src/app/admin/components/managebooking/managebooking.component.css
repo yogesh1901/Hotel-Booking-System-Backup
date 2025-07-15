@@ -1,0 +1,173 @@
+/* managebooking.component.css */
+.active-nav {
+  background: linear-gradient(80deg, #c8b33f, #d79b2b);
+}
+
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.page-item {
+  margin: 0 0.25rem;
+}
+
+.page-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.page-link:hover {
+  background-color: #f3f4f6;
+}
+
+.page-item.active .page-link {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.page-item.disabled .page-link {
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .responsive-table {
+    display: block;
+  }
+}
+
+/* Print styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-section, #print-section * {
+    visibility: visible;
+  }
+  #print-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+}
+.hidden {
+  display: none;
+}
+/* Toast message animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+.fixed[style*="display: block"] {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fixed[style*="display: none"] {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+/* Add these styles if not already present */
+.fixed {
+  position: fixed;
+}
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.bg-opacity-50 {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.z-50 {
+  z-index: 50;
+}
+
+/* Add these new styles */
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.room-seat {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.room-seat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.room-number {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.room-price {
+  font-size: 0.8rem;
+  color: #4a5568;
+}
+
+.room-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.room-actions button {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: white;
+}
+
+/* Keep all existing styles from original CSS */
+.active-nav {
+  background: linear-gradient(80deg, #c8b33f, #d79b2b);
+}
+
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* ... rest of the existing CSS ... */

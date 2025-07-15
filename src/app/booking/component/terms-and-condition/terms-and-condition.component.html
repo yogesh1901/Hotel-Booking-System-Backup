@@ -1,0 +1,71 @@
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <button 
+      routerLink="/" 
+      class="flex items-center text-[#040404] hover:text-[#d79b2b] mb-8 transition-colors">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5 mr-2" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-medium">Back to Home</span>
+    </button>
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Booking Terms & Conditions</h1>
+  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <p class="text-gray-600 mb-4">Last updated: {{ currentDate | date:'longDate' }}</p>
+    <p class="text-gray-700">
+      These terms govern your hotel bookings through BookMyHotel. By making a reservation, you agree to these conditions.
+    </p>
+  </div>
+
+  <div class="space-y-6">
+    <!-- Modification Policy -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Booking Modifications</h2>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li>You may modify your booking only if:
+          <ul class="list-disc pl-6 mt-2 space-y-1">
+            <li>It's at least 1 day before check-in</li>
+            <li>You haven't modified this booking before</li>
+            <li>Your booking is still confirmed (not cancelled)</li>
+          </ul>
+        </li>
+        <li>Modification rules:
+          <ul class="list-disc pl-6 mt-2 space-y-1">
+            <li><strong>Room downgrade:</strong> We refund the difference minus 10% modification fee</li>
+            <li><strong>Room upgrade:</strong> You must pay the full price difference</li>
+          </ul>
+        </li>
+        <li>Only one modification allowed per booking</li>
+      </ul>
+    </section>
+
+    <!-- Cancellation Policy -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Cancellation Policy</h2>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li>You may cancel your booking only if it's at least 1 day before check-in</li>
+        <li>Cancellation fee: 30% of total booking amount</li>
+        <li>Refund will be processed within 7-10 business days</li>
+        <li>No cancellations allowed on check-in day or after</li>
+      </ul>
+    </section>
+
+    <!-- General Terms -->
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">General Terms</h2>
+      <ul class="list-disc pl-6 space-y-2 text-gray-700">
+        <li>All bookings are subject to availability</li>
+        <li>We reserve the right to modify bookings for operational reasons</li>
+        <li>Any changes by admin will be notified to you</li>
+      </ul>
+    </section>
+
+    <section class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">Need Help?</h2>
+      <p class="text-gray-700">Contact us at <span class="text-blue-600">support&#64;bookmyhotel.example.com</span></p>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,419 @@
+
+<!-- Terms and Conditions Modal -->
+<div *ngIf="showTermsModal" class="fixed inset-0 bg-black bg-opacity-10 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full mx-4 p-8 relative overflow-y-auto max-h-[90vh]">
+    <button (click)="showTermsModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Booking Terms & Conditions</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <p class="text-gray-600 mb-4">Last updated: July 12, 2025</p>
+      <p class="text-gray-700">
+        These terms govern your hotel bookings through BookMyHotel. By making a reservation, you agree to these conditions.
+      </p>
+    </div>
+    <div class="space-y-6">
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Booking Modifications</h2>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>You may modify your booking only if:
+            <ul class="list-disc pl-6 mt-2 space-y-1">
+              <li>It's at least 1 day before check-in</li>
+              <li>You haven't modified this booking before</li>
+              <li>Your booking is still confirmed (not cancelled)</li>
+            </ul>
+          </li>
+          <li>Modification rules:
+            <ul class="list-disc pl-6 mt-2 space-y-1">
+              <li><strong>Room downgrade:</strong> We refund the difference minus 10% modification fee</li>
+              <li><strong>Room upgrade:</strong> You must pay the full price difference</li>
+            </ul>
+          </li>
+          <li>Only one modification allowed per booking</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Cancellation Policy</h2>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>You may cancel your booking only if it's at least 1 day before check-in</li>
+          <li>Cancellation fee: 30% of total booking amount</li>
+          <li>Refund will be processed within 7-10 business days</li>
+          <li>No cancellations allowed on check-in day or after</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">General Terms</h2>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>All bookings are subject to availability</li>
+          <li>We reserve the right to modify bookings for operational reasons</li>
+          <li>Any changes by admin will be notified to you</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Need Help?</h2>
+        <p class="text-gray-700">Contact us at <span class="text-blue-600">support&#64;bookmyhotel.example.com</span></p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div *ngIf="showPrivacyModal" class="fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full mx-4 p-8 relative overflow-y-auto max-h-[90vh]">
+    <button (click)="showPrivacyModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Privacy Policy for BookMyHotel</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <p class="text-gray-600 mb-4">Last updated: July 12, 2025</p>
+      <p class="text-gray-700 mb-6">
+        At BookMyHotel, we are committed to protecting your privacy. This Privacy Policy explains how we collect, 
+        use, disclose, and safeguard your information when you use our hotel booking services.
+      </p>
+    </div>
+    <div class="space-y-8">
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">1. Information We Collect</h2>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li><strong>Personal Information:</strong> Name, email address, phone number, payment details</li>
+          <li><strong>Booking Information:</strong> Hotel preferences, dates, special requests</li>
+          <li><strong>Device Information:</strong> IP address, browser type, operating system</li>
+          <li><strong>Usage Data:</strong> Pages visited, time spent, actions taken on our platform</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">2. How We Use Your Information</h2>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>To process and manage your hotel bookings</li>
+          <li>To communicate with you about your reservations</li>
+          <li>To improve our services and user experience</li>
+          <li>To prevent fraud and enhance security</li>
+          <li>To comply with legal obligations</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">3. Data Sharing and Disclosure</h2>
+        <p class="text-gray-700 mb-4">
+          We may share your information with:
+        </p>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Hotels you book with to fulfill your reservation</li>
+          <li>Payment processors to complete transactions</li>
+          <li>Service providers who assist with our operations</li>
+          <li>Legal authorities when required by law</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">4. Your Rights</h2>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Access and request a copy of your personal data</li>
+          <li>Request correction of inaccurate information</li>
+          <li>Request deletion of your personal data</li>
+          <li>Object to or restrict processing of your data</li>
+          <li>Withdraw consent where applicable</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">5. Data Security</h2>
+        <p class="text-gray-700 mb-4">
+          We implement appropriate technical and organizational measures to protect your personal data, including:
+        </p>
+        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Encryption of sensitive data</li>
+          <li>Secure payment processing</li>
+          <li>Regular security assessments</li>
+          <li>Access controls to personal data</li>
+        </ul>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">6. Changes to This Policy</h2>
+        <p class="text-gray-700">
+          We may update this Privacy Policy periodically. We will notify you of significant changes by posting the new policy on our website and updating the "Last updated" date.
+        </p>
+      </section>
+      <section class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">7. Contact Us</h2>
+        <p class="text-gray-700">
+          If you have questions about this Privacy Policy or our data practices, please contact us at:
+        </p>
+        <p class="mt-2 text-indigo-600">
+          privacy&#64;bookmyhotel.example.com
+        </p>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="bg-[#f8f3e7]min-h-screen font-sans">
+<div class="container mx-auto px-4 py-6">
+    <!-- Room Search Page -->
+    <button (click)="goToHome()" class="back-button mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span>Back to Home</span>
+    </button>
+<div class="bg-white shadow-lg rounded-b-lg">
+  <div class="flex flex-row min-h-[600px]"> <!-- Always row, min height for alignment -->
+    <!-- Left Side - Booking Form (move first) -->
+    <div class="w-1/2 p-6 flex flex-col justify-start"> <!-- Fixed width, flex column -->
+      <h3 class="font-bold text-xl mb-6 text-gray-800">Booking: {{currentBooking.room.name}}</h3>
+      
+      <!-- Booking For Selector -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Booking For</label>
+        <div class="flex gap-4">
+          <label class="flex items-center">
+            <input type="radio" name="bookingFor" value="self" [(ngModel)]="bookingFor" (change)="onBookingForChange()" class="mr-2 text-indigo-600 focus:ring-indigo-500">
+            <span class="text-gray-700">Self</span>
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="bookingFor" value="other" [(ngModel)]="bookingFor" (change)="onBookingForChange()" class="mr-2 text-indigo-600 focus:ring-indigo-500">
+            <span class="text-gray-700">Someone else</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Guest count controls -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Guests</label>
+        <div class="flex flex-col sm:flex-row gap-6 items-center">
+          <div>
+            <label class="block text-xs text-gray-600 mb-1">Adults</label>
+            <div class="flex items-center border border-gray-300 rounded w-28 bg-gray-50">
+              <span class="flex-1 text-center text-gray-800">{{ currentBooking.adults }}</span>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-600 mb-1">Children</label>
+            <div class="flex items-center border border-gray-300 rounded w-28 bg-gray-50">
+              <span class="flex-1 text-center text-gray-800">{{ currentBooking.children }}</span>
+            </div>
+          </div>
+          <span *ngIf="currentBooking.adults + currentBooking.children === 5" class="text-xs text-gray-500">Max 5 guests per room</span>
+        </div>
+      </div>
+
+      <!-- Profile Incomplete Warning for Self Booking -->
+      <div *ngIf="bookingFor === 'self' && profileIncomplete" class="mb-6">
+        <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded flex flex-col items-start">
+          <div class="mb-2 font-semibold">Your profile is incomplete. Please update the following fields before booking:</div>
+          <ul class="list-disc pl-6 mb-2">
+            <li *ngFor="let field of profileIncompleteFields">{{ field }}</li>
+          </ul>
+          <button (click)="goToProfile()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-semibold">Go to Profile</button>
+        </div>
+      </div>
+
+      <!-- Disable form if profile incomplete for self -->
+      <div [class.opacity-50]="bookingFor === 'self' && profileIncomplete" [class.pointer-events-none]="bookingFor === 'self' && profileIncomplete">
+        <!-- Guest Information -->
+        <div class="mb-8">
+          <h4 class="font-semibold text-lg text-gray-800 mb-4 border-b pb-2">Guest Information</h4>
+          <!-- Self Booking: Show current user details as static fields, Aadhaar editable if null -->
+          <ng-container *ngIf="bookingFor === 'self'; else guestForm">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <div class="w-full rounded border border-gray-300 px-4 py-2 bg-gray-50 text-gray-800">{{ currentBooking.guestInfo.name }}</div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <div class="w-full rounded border border-gray-300 px-4 py-2 bg-gray-50 text-gray-800">{{ currentBooking.guestInfo.email }}</div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <div class="w-full rounded border border-gray-300 px-4 py-2 bg-gray-50 text-gray-800">{{ currentBooking.guestInfo.phone }}</div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Aadhaar Number</label>
+                <ng-container *ngIf="!currentBooking.guestInfo.aadhar">
+                  <input type="text" [(ngModel)]="currentBooking.guestInfo.aadhar" maxlength="12" minlength="12" pattern="[0-9]{12}" 
+                         class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Enter Aadhaar Number">
+                  <span class="text-xs text-gray-500">(Please enter your Aadhaar to complete your profile)</span>
+                </ng-container>
+                <ng-container *ngIf="currentBooking.guestInfo.aadhar">
+                  <div class="w-full rounded border border-gray-300 px-4 py-2 bg-gray-50 text-gray-800">{{ currentBooking.guestInfo.aadhar }}</div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+          <!-- Guest Booking: Show editable form -->
+          <ng-template #guestForm>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input type="text" [(ngModel)]="currentBooking.guestInfo.name" 
+                       class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input type="email" [(ngModel)]="currentBooking.guestInfo.email" 
+                       class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <input type="tel" [(ngModel)]="currentBooking.guestInfo.phone" 
+                       class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Aadhaar Number</label>
+                <input type="text" [(ngModel)]="currentBooking.guestInfo.aadhar" maxlength="12" minlength="12" pattern="[0-9]{12}" 
+                       class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Special Requests</label>
+                <textarea rows="3" [(ngModel)]="currentBooking.guestInfo.requests" 
+                          class="w-full rounded border border-gray-300 resize-none px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+        
+        <!-- Payment Information -->
+        <div class="mb-8">
+          <h4 class="font-semibold text-lg text-gray-800 mb-4 border-b pb-2">Payment Information</h4>
+          
+          <!-- Payment Method Selection -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+            <div class="grid grid-cols-2 gap-4">
+              <div *ngFor="let method of paymentMethods">
+                <input type="radio" [id]="'method-'+method.value" name="paymentMethod" [value]="method.value" 
+                       [(ngModel)]="currentBooking.paymentInfo.method" class="hidden peer">
+                <label [for]="'method-'+method.value" 
+                       class="flex items-center justify-center p-3 border border-gray-300 rounded-lg cursor-pointer peer-checked:border-indigo-500 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 hover:bg-gray-50">
+                  <span class="text-sm font-medium">{{method.label}}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Credit Card Form -->
+          <div *ngIf="currentBooking.paymentInfo.method === 'credit'" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+              <input type="text" [(ngModel)]="currentBooking.paymentInfo.creditCard.number" placeholder="1234 5678 9012 3456" 
+                     class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                <input type="text" [(ngModel)]="currentBooking.paymentInfo.creditCard.expiry" placeholder="MM/YY" 
+                       class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+                <input type="text" [(ngModel)]="currentBooking.paymentInfo.creditCard.cvv" placeholder="123" 
+                       class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
+              <input type="text" [(ngModel)]="currentBooking.paymentInfo.creditCard.name" 
+                     class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+          </div>
+          
+          <!-- PayPal Form -->
+          <div *ngIf="currentBooking.paymentInfo.method === 'paypal'" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">PayPal Email</label>
+              <input type="email" [(ngModel)]="currentBooking.paymentInfo.paypal.email" 
+                     class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+          </div>
+          
+          <!-- Bank Transfer Form -->
+          <div *ngIf="currentBooking.paymentInfo.method === 'bank'" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+              <input type="text" [(ngModel)]="currentBooking.paymentInfo.bankTransfer.accountNumber" 
+                     class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">IFSC Code</label>
+              <input type="text" [(ngModel)]="currentBooking.paymentInfo.bankTransfer.ifsc" 
+                     class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+          </div>
+          
+          <!-- UPI Payment Form -->
+          <div *ngIf="currentBooking.paymentInfo.method === 'upi'" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">UPI ID</label>
+              <input type="text" [(ngModel)]="currentBooking.paymentInfo.upi.id" placeholder="yourname@upi" 
+                     class="w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+          </div>
+
+          <!-- Payment & Guest Validation Errors -->
+          <div *ngIf="formErrors.length > 0" class="mt-6">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              <ul class="list-disc pl-5">
+                <li *ngFor="let error of formErrors">{{ error }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Terms and Conditions -->
+        <div class="mb-6">
+          <div class="flex items-start">
+            <input type="checkbox" id="termsAgreement" [(ngModel)]="currentBooking.termsAgreed" class="mt-1 mr-2 rounded text-indigo-600 focus:ring-indigo-500">
+        <label for="termsAgreement" class="text-sm text-gray-700">
+          I agree to the 
+          <a href="#" (click)="$event.preventDefault(); showTermsModal = true" class="text-indigo-600 hover:underline">Terms and Conditions</a> 
+          and 
+          <a href="#" (click)="$event.preventDefault(); showPrivacyModal = true" class="text-indigo-600 hover:underline">Privacy Policy</a>
+        </label>
+          </div>
+        </div>
+        <button (click)="confirmBooking()" class="w-full bg-gradient-to-r from-yellow-300 to-yellow-500  text-white py-3 rounded-lg font-bold transition-colors"
+          [disabled]="bookingFor === 'self' && profileIncomplete">
+          Confirm Booking
+        </button>
+      </div>
+    </div>
+    <!-- Right Side - Booking Summary (move after) -->
+    <div class="w-1/2 bg-indigo-50 p-6 border-l border-gray-200 flex flex-col justify-start sticky top-0 h-fit"> <!-- Fixed width, sticky for always visible, border left -->
+      <h3 class="font-bold text-xl text-gray-800 mb-6">Booking Summary</h3>
+      <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div class="flex items-start mb-4">
+          <img [src]="currentBooking.room.image" [alt]="currentBooking.room.name" class="w-20 h-20 object-cover rounded mr-4">
+          <div>
+            <h4 class="font-semibold text-gray-800">{{currentBooking.room.name}}</h4>
+            <p class="text-sm text-gray-600">{{currentBooking.room.description}}</p>
+          </div>
+        </div>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Check-in</span>
+            <span class="font-medium text-gray-800">{{formatDisplayDate(currentBooking.checkIn)}}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Check-out</span>
+            <span class="font-medium text-gray-800">{{formatDisplayDate(currentBooking.checkOut)}}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Nights</span>
+            <span class="font-medium text-gray-800">{{calculateNights()}}</span>
+          </div>
+        </div>
+        <div class="border-t border-gray-200 pt-4">
+          <div class="flex justify-between mb-2">
+            <span class="text-gray-600">Room Price ({{calculateNights()}} nights)</span>
+            <span class="font-medium text-gray-800">₹{{(currentBooking.room.price * calculateNights()).toLocaleString()}}</span>
+          </div>
+          <div class="flex justify-between mb-2">
+            <span class="text-gray-600">Taxes & Fees</span>
+            <span class="font-medium text-gray-800">₹{{Math.round(currentBooking.room.price * calculateNights() * 0.18).toLocaleString()}}</span>
+          </div>
+          <div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t border-gray-200">
+            <span class="text-gray-800">Total</span>
+            <span class="text-indigo-700">₹{{calculateTotal().toLocaleString()}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>

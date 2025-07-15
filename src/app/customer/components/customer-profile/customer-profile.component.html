@@ -1,0 +1,139 @@
+<div class="p-6 bg-black h-full">
+<div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+  <h1 class="text-2xl text-white font-bold">Profile</h1>
+   <a routerLink="/">
+      <button class="px-4 py-2 bg-gradient-to-r from-[#ffdfbe] to-[#997650] text-black rounded-3xl hover:bg-[#FFD54F] transition flex items-center">
+        <i class="fas fa-home mr-2 mb-1"></i> Back to Home
+      </button>
+    </a>
+</div>
+
+<div class="bg-white/10 backdrop-blur-md border border-amber-400 rounded-xl shadow-md p-4 md:p-6 text-white">
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+    <h2 class="text-xl font-semibold text-white">
+      <i class="fas fa-user-circle mr-2"></i> User Information
+    </h2>
+    <div class="flex gap-2 justify-end">
+      <button *ngIf="!isEditing" id="editBtn" class="px-3 py-1 bg-amber-400 text-black rounded hover:bg-amber-500 transition flex items-center" (click)="toggleEditMode()">
+        <i class="fas fa-edit mr-1"></i> Edit Profile
+      </button>
+      <button *ngIf="isEditing" id="saveBtn" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition flex items-center" (click)="confirmSave()">
+        <i class="fas fa-save mr-1"></i> Save
+      </button>
+      <button *ngIf="isEditing" id="cancelBtn" class="px-3 py-1 bg-gray-300 text-black rounded hover:bg-gray-400 transition flex items-center" (click)="cancelEdit()">
+        <i class="fas fa-times mr-1"></i> Cancel
+      </button>
+    </div>
+  </div>
+  
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Profile Image Section -->
+    <div class="w-full md:w-1/3 flex flex-col items-center gap-4">
+      <div class="relative">
+        <img [src]="previewUrl" alt="Profile Image" class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-gray-200">
+        <div *ngIf="isEditing" class="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md">
+          <label for="profileImage" class="cursor-pointer text-blue-500 hover:text-blue-700">
+            <i class="fas fa-camera"></i>
+            <input id="profileImage" type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+          </label>
+        </div>
+      </div>
+      <div *ngIf="!isEditing" class="text-center">
+        <h3 class="font-bold text-lg text-white">{{ profileData.name }}</h3>
+        <p class="text-white/80">{{ profileData.email }}</p>
+      </div>
+    </div>
+
+    <!-- Profile Information Section -->
+    <div class="w-full md:w-2/3">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Name Field -->
+        <div class="md:text-right font-medium pt-1 text-white/80">Name:</div>
+        <div class="md:col-span-2">
+        <div class="bg-white/10 rounded px-3 py-2 text-white/80">{{ profileData.name || 'Fill the data' }}</div>
+        </div>
+
+        <!-- Aadhaar Field -->
+        <div class="md:text-right font-medium pt-1 text-white/80">Aadhaar No:</div>
+        <div class="md:col-span-2">
+        <div *ngIf="!isEditing" class="bg-white/10 rounded px-3 py-2 text-white/80">
+            {{ profileData.aadhar || 'Not set' }}
+            <span *ngIf="!profileData.aadhar" class="text-xs text-white/60">(Set your Aadhaar number)</span>
+            <span *ngIf="profileData.aadhar" class="text-xs text-red-400">(Aadhaar can only be set once)</span>
+          </div>
+          <input *ngIf="isEditing" id="aadharInput" type="text" maxlength="12" minlength="12"
+                 class="w-full border border-gray-300 rounded px-3 py-2" [(ngModel)]="profileData.aadhar"
+                 (blur)="validateField('aadhar', profileData.aadhar)"
+                 placeholder="Enter 12-digit Aadhaar number"
+                 pattern="[0-9]{12}">
+          <div *ngIf="formErrors.aadhar" class="text-xs text-red-500 mt-1">{{ formErrors.aadhar }}</div>
+          <div *ngIf="isEditing" class="text-xs text-gray-500 mt-1">Aadhaar can only be set once. Please double-check before saving.</div>
+        </div>
+
+        <!-- Phone Field -->
+        <div class="md:text-right font-medium pt-1 text-white/80">Phone No:</div>
+        <div class="md:col-span-2">
+        <div id="phoneDisplay" class="bg-white/10 rounded px-3 py-2 text-white/80" [class.hidden]="isEditing">{{ profileData.phone || 'Fill the data' }}</div>
+          <input id="phoneInput" type="tel" class="w-full border border-gray-300 rounded px-3 py-2" 
+                 [class.hidden]="!isEditing" 
+                 [(ngModel)]="profileData.phone"
+                 (blur)="validateField('phone', profileData.phone)"
+                 pattern="^[0-9]{10,15}$"
+                 maxlength="15">
+          <div *ngIf="formErrors.phone" class="text-red-500 text-sm mt-1">{{ formErrors.phone }}</div>
+        </div>
+
+        <!-- Email Field (non-editable) -->
+        <div class="md:text-right font-medium pt-1 text-white/80">Email:</div>
+        <div class="md:col-span-2">
+        <div id="emailDisplay" class="bg-white/10 rounded px-3 py-2 text-white/80">{{ profileData.email || 'Fill the data' }}</div>
+        </div>
+
+        <!-- Address Field -->
+        <div class="md:text-right font-medium pt-1 text-white/80">Address:</div>
+        <div class="md:col-span-2">
+        <div id="addressDisplay" class="bg-white/10 rounded px-3 py-2 text-white/80" [class.hidden]="isEditing">{{ profileData.address || 'Fill the data' }}</div>
+          <input id="addressInput" type="text" class="w-full border border-gray-300 rounded px-3 py-2" 
+                 [class.hidden]="!isEditing" 
+                 [(ngModel)]="profileData.address"
+                 (blur)="validateField('address', profileData.address)"
+                 minlength="10">
+          <div *ngIf="formErrors.address" class="text-red-500 text-sm mt-1">{{ formErrors.address }}</div>
+        </div>
+
+        <!-- Country Field -->
+        <div class="md:text-right font-medium pt-1 text-white/80">Country:</div>
+        <div class="md:col-span-2">
+        <div id="countryDisplay" class="bg-white/10 rounded px-3 py-2 text-white/80" [class.hidden]="isEditing">{{ profileData.country || 'Fill the data' }}</div>
+          <input id="countryInput" type="text" class="w-full border border-gray-300 rounded px-3 py-2" 
+                 [class.hidden]="!isEditing" 
+                 [(ngModel)]="profileData.country"
+                 (blur)="validateField('country', profileData.country)"
+                 pattern="^[a-zA-Z\s]{2,}$">
+          <div *ngIf="formErrors.country" class="text-red-500 text-sm mt-1">{{ formErrors.country }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+    <h3 class="text-xl font-bold mb-4">{{ modalConfig.title }}</h3>
+    <p class="mb-6">{{ modalConfig.message }}</p>
+    <div class="flex justify-end space-x-3">
+      <button 
+        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition"
+        (click)="onModalCancel()">
+        {{ modalConfig.cancelText }}
+      </button>
+      <button 
+        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+        (click)="onModalConfirm()">
+        {{ modalConfig.confirmText }}
+      </button>
+    </div>
+  </div>
+</div>
+</div>

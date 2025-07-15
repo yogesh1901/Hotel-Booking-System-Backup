@@ -1,0 +1,411 @@
+<div class="flex h-screen bg-gray-100 font-sans"> 
+ 
+  <div class="flex-1 bg-[#ECDFCC] overflow-auto">
+    <section class="p-6">
+      <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h1 class="text-2xl font-bold">Manage Customers</h1>
+        <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+          <div class="relative w-full md:w-64">
+            <input 
+              type="text" 
+              placeholder="Search customers..." 
+              class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              (input)="performSearch($any($event.target).value)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-3 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="responsive-table">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr class="bg-gradient-to-r from-[#41473f] to-[#90ad87] text-white">
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Customer ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Phone</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Bookings</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let customer of getCustomersToShow()">
+                <td class="px-6 py-4 whitespace-nowrap">{{ customer.customerId }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ customer.name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ customer.email }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ customer.phone }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span 
+                    class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                    [class.bg-green-100]="customer.status === 'Unblock'"
+                    [class.text-green-800]="customer.status === 'Unblock'"
+                    [class.bg-red-100]="customer.status === 'Block'"
+                    [class.text-red-800]="customer.status === 'Block'">
+                    {{ customer.status }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ customer.totalBooking }}</td>
+                <td class="px-6 py-4 whitespace-nowrap space-x-2">
+                  <button 
+                    (click)="openViewCustomerModal(customer)"
+                    class="text-blue-600 hover:text-blue-900">View</button>
+                  <button 
+                    (click)="openEditCustomerModal(customer)"
+                    class="text-yellow-600 hover:text-yellow-900">Edit</button>
+                  <button 
+                    (click)="toggleCustomerStatus(customer)"
+                    [class.text-red-600]="customer.status === 'Unblock'"
+                    [class.hover:text-red-900]="customer.status === 'Unblock'"
+                    [class.text-green-600]="customer.status === 'Block'"
+                    [class.hover:text-green-900]="customer.status === 'Block'">
+                    {{ customer.status === 'Unblock' ? 'Block' : 'Unblock' }}
+                  </button>
+                  <button 
+                    (click)="openDeleteConfirmation(customer)"
+                    class="text-red-600 hover:text-red-900">Delete</button>
+                  <button 
+                    (click)="openPrintModal(customer)"
+                    class="text-purple-600 hover:text-purple-900">Print</button>
+                </td>
+              </tr>
+              <tr *ngIf="getCustomersToShow().length === 0">
+                <td colspan="7" class="px-6 py-4 text-center text-gray-500">No customers found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-700">
+              {{ updateResultsInfo() }}
+            </p>
+          </div>
+          <nav class="flex" *ngIf="getTotalPages() > 1">
+            <ul class="flex space-x-2">
+              <li>
+                <button 
+                  (click)="changePage(currentPage - 1)"
+                  [disabled]="currentPage === 1"
+                  class="px-3 py-1 border rounded"
+                  [class.text-gray-400]="currentPage === 1"
+                  [class.cursor-not-allowed]="currentPage === 1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              </li>
+              
+              <ng-container *ngIf="getPaginationRange().startPage > 1">
+                <li>
+                  <button 
+                    (click)="changePage(1)"
+                    class="px-3 py-3 border rounded"
+                    [class.bg-blue-600]="currentPage === 1"
+                    [class.text-white]="currentPage === 1">
+                    1
+                  </button>
+                </li>
+                <li *ngIf="getPaginationRange().startPage > 2" class="px-3 py-3">...</li>
+              </ng-container>
+              
+              <ng-container *ngFor="let page of getPageNumbers(getPaginationRange().startPage, getPaginationRange().endPage)">
+                <li>
+                  <button 
+                    (click)="changePage(page)"
+                    class="px-3 py-1 border rounded"
+                    [class.bg-blue-600]="currentPage === page"
+                    [class.text-white]="currentPage === page">
+                    {{ page }}
+                  </button>
+                </li>
+              </ng-container>
+              
+              <ng-container *ngIf="getPaginationRange().endPage < getPaginationRange().totalPages">
+                <li *ngIf="getPaginationRange().endPage < getPaginationRange().totalPages - 1" class="px-3 py-1">...</li>
+                <li>
+                  <button 
+                    (click)="changePage(getPaginationRange().totalPages)"
+                    class="px-3 py-1 border rounded"
+                    [class.bg-blue-600]="currentPage === getPaginationRange().totalPages"
+                    [class.text-white]="currentPage === getPaginationRange().totalPages">
+                    {{ getPaginationRange().totalPages }}
+                  </button>
+                </li>
+              </ng-container>
+              
+              <li>
+                <button 
+                  (click)="changePage(currentPage + 1)"
+                  [disabled]="currentPage === getTotalPages()"
+                  class="px-3 py-1 border rounded"
+                  [class.text-gray-400]="currentPage === getTotalPages()"
+                  [class.cursor-not-allowed]="currentPage === getTotalPages()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+<div *ngIf="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-blue-700">Edit Customer</h2>
+        <button (click)="closeEditModal()" class="text-gray-500 hover:text-red-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form [formGroup]="customerForm" (ngSubmit)="showSaveConfirmationModal = true">
+        <input type="hidden" formControlName="id">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            class="w-full px-3 py-2 border border-blue-300 bg-gray-100 text-gray-500 rounded-lg focus:outline-none cursor-not-allowed"
+            readonly>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="mobileNumber">Mobile Number</label>
+          <input 
+            type="tel" 
+            id="mobileNumber" 
+            formControlName="mobileNumber"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold  mb-2"  for="address">Address</label>
+          <textarea
+            id="address" 
+            formControlName="address"
+            rows="3"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Country</label>
+          <input 
+            type="text" 
+            id="country" 
+            formControlName="country"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex justify-end space-x-2 pt-2">
+          <button 
+            type="button" 
+            (click)="closeEditModal()"
+            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200">
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            [disabled]="customerForm.invalid"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 disabled:opacity-50">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Save Confirmation Modal -->
+<div *ngIf="showSaveConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-blue-700">Confirm Changes</h2>
+        <button (click)="showSaveConfirmationModal = false" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="mb-6">
+        <p class="text-gray-700">Are you sure you want to save changes to <strong>{{ customerForm.get('email')?.value }}</strong>?</p>
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          (click)="showSaveConfirmationModal = false"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          (click)="onSubmit(); showSaveConfirmationModal = false"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="showViewModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Customer Details</h2>
+        <button (click)="closeViewModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div *ngIf="selectedCustomer" class="space-y-4">
+        <div class="flex flex-col items-center mb-4">
+          <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-200 shadow-lg mb-2">
+            <img [src]="selectedCustomer.photo || 'https://via.placeholder.com/120x120?text=No+Photo'" alt="Customer Photo" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800">{{ selectedCustomer.name }}</h3>
+          <span class="text-sm text-gray-500">Customer ID: {{ selectedCustomer.customerId }}</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Email</p>
+            <p class="font-medium text-gray-700">{{ selectedCustomer.email }}</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Mobile Number</p>
+            <p class="font-medium text-gray-700">{{ selectedCustomer.phone }}</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Aadhar Number</p>
+            <p class="font-medium text-gray-700">{{ selectedCustomer.aadhar }}</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Address</p>
+            <p class="font-medium text-gray-700">{{ selectedCustomer.address }}</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Country</p>
+            <p class="font-medium text-gray-700">{{ selectedCustomer.country }}</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Total Bookings</p>
+            <p class="font-medium text-gray-700">{{ selectedCustomer.totalBooking }}</p>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-4 shadow">
+            <p class="text-xs text-gray-500 mb-1">Status</p>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold"
+              [class.bg-green-200]="selectedCustomer.status === 'Unblock'"
+              [class.text-green-800]="selectedCustomer.status === 'Unblock'"
+              [class.bg-red-200]="selectedCustomer.status === 'Block'"
+              [class.text-red-800]="selectedCustomer.status === 'Block'">
+              {{ selectedCustomer.status }}
+            </span>
+          </div>
+        </div>
+        <div class="flex justify-end space-x-2 pt-6">
+          <button 
+            type="button" 
+            (click)="closeViewModal()"
+            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200">
+            Close
+          </button>
+          <button 
+            type="button" 
+            (click)="openPrintModal(selectedCustomer)"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200">
+            Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="showStatusModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Confirm Status Change</h2>
+        <button (click)="closeStatusModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="mb-6">
+        <p class="text-gray-700">
+          Are you sure you want to change the status of 
+          <strong>{{ selectedCustomer?.name }}</strong> 
+          to {{ selectedCustomer?.status === 'Unblock' ? 'Block' : 'Unblock' }}?
+        </p>
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          (click)="closeStatusModal()"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          (click)="confirmStatusChange()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Confirm Deletion</h2>
+        <button (click)="closeDeleteModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="mb-6">
+        <p class="text-gray-700">
+          Are you sure you want to permanently delete 
+          <strong>{{ selectedCustomer?.name }}</strong>?
+          This action cannot be undone.
+        </p>
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          (click)="closeDeleteModal()"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          (click)="confirmDelete()"
+          class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showToast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-md shadow-lg z-50">
+  {{ toastMessage }}
+</div>

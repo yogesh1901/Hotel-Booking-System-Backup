@@ -1,0 +1,156 @@
+<div class="relative z-10">
+<div class=" min-h-screen py-12 px-4 sm:px-6 lg:px-8 font-inter">
+  <div class="max-w-4xl mx-auto">
+    <!-- Back button -->
+    <button 
+      routerLink="/" 
+      class="flex items-center text-[#040404] hover:text-[#d79b2b] mb-8 transition-colors">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5 mr-2" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-medium">Back to Home</span>
+    </button>
+
+    <!-- Success message -->
+    <div *ngIf="isSubmitted" class="mb-8 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+      <p class="font-bold">Thank you for your feedback!</p>
+      <p>We appreciate you taking the time to share your experience with us.</p>
+    </div>
+
+    <!-- Feedback form container -->
+    <div class="bg-[#111111] rounded-xl shadow-lg overflow-hidden border border-[#e6c96e]/30">
+      <div class="p-8 sm:p-10">
+        <h1 class="text-3xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#e6c96e] to-[#d79b2b]">
+          Share Your Feedback
+        </h1>
+        
+        <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <!-- Name and Email -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-[#e6c96e] mb-2">Your Name<span class="text-red-600"> *</span></label>
+              <input 
+                type="text" 
+                formControlName="name"
+                placeholder="Enter your name"
+                class="w-full px-4 py-3 rounded-lg bg-[#333333] border border-[#e6c96e]/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e6c96e]/50 focus:border-[#e6c96e]/30 transition-all"
+                [class.border-red-500]="feedbackForm.get('name')?.invalid && feedbackForm.get('name')?.touched"
+              >
+              <div *ngIf="feedbackForm.get('name')?.invalid && feedbackForm.get('name')?.touched" class="mt-1 text-red-400 text-sm">
+                <div *ngIf="feedbackForm.get('name')?.errors?.['required']">Name is required</div>
+                <div *ngIf="feedbackForm.get('name')?.errors?.['minlength']">Name must be at least 2 characters</div>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-[#e6c96e] mb-2">Your Email<span class="text-red-600"> *</span></label>
+              <input 
+                type="email" 
+                formControlName="email"
+                placeholder="Enter your email"
+                class="w-full px-4 py-3 rounded-lg bg-[#333333] border border-[#e6c96e]/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e6c96e]/50 focus:border-[#e6c96e]/30 transition-all"
+                [class.border-red-500]="feedbackForm.get('email')?.invalid && feedbackForm.get('email')?.touched"
+              >
+              <div *ngIf="feedbackForm.get('email')?.invalid && feedbackForm.get('email')?.touched" class="mt-1 text-red-400 text-sm">
+                <div *ngIf="feedbackForm.get('email')?.errors?.['required']">Email is required</div>
+                <div *ngIf="feedbackForm.get('email')?.errors?.['email']">Please enter a valid email</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rating -->
+          <div>
+            <label class="block text-sm font-medium text-[#e6c96e] mb-3">Rating<span class="text-red-600"> *</span></label>
+            <div class="flex space-x-2">
+              <button 
+                type="button"
+                (click)="setRating(1)"
+                class="w-10 h-10 rounded-full bg-[#333333] border border-[#e6c96e]/30 text-[#e6c96e] hover:bg-[#e6c96e] hover:text-[#222222] transition-all flex items-center justify-center font-medium"
+                [class.bg-[#e6c96e]]="selectedRating >= 1"
+                [class.text-[#222222]]="selectedRating >= 1"
+              >
+                1
+              </button>
+              <button 
+                type="button"
+                (click)="setRating(2)"
+                class="w-10 h-10 rounded-full bg-[#333333] border border-[#e6c96e]/30 text-[#e6c96e] hover:bg-[#e6c96e] hover:text-[#222222] transition-all flex items-center justify-center font-medium"
+                [class.bg-[#e6c96e]]="selectedRating >= 2"
+                [class.text-[#222222]]="selectedRating >= 2"
+              >
+                2
+              </button>
+              <button 
+                type="button"
+                (click)="setRating(3)"
+                class="w-10 h-10 rounded-full bg-[#333333] border border-[#e6c96e]/30 text-[#e6c96e] hover:bg-[#e6c96e] hover:text-[#222222] transition-all flex items-center justify-center font-medium"
+                [class.bg-[#e6c96e]]="selectedRating >= 3"
+                [class.text-[#222222]]="selectedRating >= 3"
+              >
+                3
+              </button>
+              <button 
+                type="button"
+                (click)="setRating(4)"
+                class="w-10 h-10 rounded-full bg-[#333333] border border-[#e6c96e]/30 text-[#e6c96e] hover:bg-[#e6c96e] hover:text-[#222222] transition-all flex items-center justify-center font-medium"
+                [class.bg-[#e6c96e]]="selectedRating >= 4"
+                [class.text-[#222222]]="selectedRating >= 4"
+              >
+                4
+              </button>
+              <button 
+                type="button"
+                (click)="setRating(5)"
+                class="w-10 h-10 rounded-full bg-[#333333] border border-[#e6c96e]/30 text-[#e6c96e] hover:bg-[#e6c96e] hover:text-[#222222] transition-all flex items-center justify-center font-medium"
+                [class.bg-[#e6c96e]]="selectedRating >= 5"
+                [class.text-[#222222]]="selectedRating >= 5"
+              >
+                5
+              </button>
+            </div>
+            <div *ngIf="feedbackForm.get('rating')?.invalid && feedbackForm.get('rating')?.touched" class="mt-1 text-red-400 text-sm">
+              Please select a rating
+            </div>
+            <input type="hidden" formControlName="rating">
+          </div>
+
+          <!-- Feedback text -->
+          <div>
+            <label class="block text-sm font-medium text-[#e6c96e] mb-2">Your Feedback<span class="text-red-600"> *</span> </label>
+            <textarea  style="resize: none;"
+              rows="5"
+              formControlName="feedback"
+              placeholder="Tell us about your experience..."
+              class="w-full px-4 py-3 rounded-lg bg-[#333333] border border-[#e6c96e]/30 text-white    placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e6c96e]/50 focus:border-[#e6c96e]/30 transition-all"
+              [class.border-red-500]="feedbackForm.get('feedback')?.invalid && feedbackForm.get('feedback')?.touched " 
+            ></textarea>
+            <div *ngIf="feedbackForm.get('feedback')?.invalid && feedbackForm.get('feedback')?.touched" class="mt-1 text-red-400 text-sm">
+              <div *ngIf="feedbackForm.get('feedback')?.errors?.['required']">Feedback is required</div>
+              <div *ngIf="feedbackForm.get('feedback')?.errors?.['minlength']">Feedback must be at least 10 characters</div>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <div>
+            <button 
+              type="submit"
+              class="w-full bg-gradient-to-r from-[#e6c96e] to-[#d79b2b] text-[#222222] px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-all hover:shadow-md"
+              [disabled]="feedbackForm.invalid"
+            >
+              Submit Feedback
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="fixed inset-0  h-full z-0">
+  <img src="assets/image2.jpg" alt="Background" class="w-full h-full object-cover " />
+</div>

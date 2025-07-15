@@ -1,0 +1,48 @@
+<!-- customer-payment-history.component.html -->
+<div class="p-6 bg-black h-full">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl text-white font-bold">Payment History</h1>
+    <a routerLink="/">
+      <button class="px-4 py-2 bg-gradient-to-r from-[#ffdfbe] to-[#997650] text-black rounded-3xl hover:bg-[#FFD54F] transition flex items-center">
+        <i class="fas fa-home mr-2 mb-1"></i> Back to Home
+      </button>
+    </a>
+  </div>
+  
+  <div class="container-div rounded-xl p-6 text-white">
+    <div class="bg-white/10 backdrop-blur-md border border-amber-400 rounded-lg shadow overflow-hidden">
+      <div class="grid grid-cols-4 bg-white/10 border-b border-amber-400 text-white p-4 font-medium">
+        <div>Transaction ID</div>
+        <div>Amount</div>
+        <div>Date</div>
+        <div>Status</div>
+      </div>
+      
+      <div class="divide-y divide-white/20">
+        <div *ngFor="let payment of payments" class="grid grid-cols-4 p-4 hover:bg-white/20 items-center">
+          <div class="font-medium text-white">{{ payment.id }}</div>
+          <div class="text-white/80">{{ payment.amount }}</div>
+          <div class="text-white/80">{{ payment.date }}</div>
+          <div>
+            <span class="bg-green-500/20 text-green-200 px-2 py-1 rounded text-xs font-medium">
+              {{ payment.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex justify-between items-center mt-4 px-2">
+      <div class="text-sm text-white/80">Showing 1 to {{ payments.length }} of {{ payments.length }} transactions</div>
+      <div class="flex space-x-2">
+        <button class="px-3 py-1 bg-white/10 text-white rounded hover:bg-white/20 transition" disabled>
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <button class="px-3 py-1 bg-amber-400 text-white rounded hover:bg-amber-500 transition">1</button>
+        <button class="px-3 py-1 bg-white/10 text-white rounded hover:bg-white/20 transition" disabled>
+          Next <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

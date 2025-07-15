@@ -1,0 +1,212 @@
+<!-- Sidebar -->
+<div class="w-64 bg-[#1E201E] h-full text-white p-4 hidden md:flex flex-col">
+  <div class="mb-8">
+    <h1 class="alig sm:text-sm md:text-md lg:text-xl font-bold">Admin</h1>
+    <p class="sm:text-sm md:text-md lg:text-xl text-blue-200">admin&#64;gamil.com</p>
+  </div>
+  
+  <nav class="flex-1">
+    <ul class="space-y-2">
+      <li>
+        <a [routerLink]="['/dashboard']" 
+           class="flex items-center p-2 rounded hover:bg-[#3C3D37] active-nav" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managebooking']" 
+            class="flex items-center p-2 rounded hover:bg-[#3C3D37] "
+           routerLinkActive="active-nav">
+          <i class="fas fa-calendar-check mr-3"></i> Manage Booking
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managerooms']" 
+            class="flex items-center p-2 rounded hover:bg-[#3C3D37]"
+           routerLinkActive="active-nav">
+          <i class="fas fa-bed mr-3"></i> Manage Rooms
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managecustomer']"
+            class="flex items-center p-2 rounded hover:bg-[#3C3D37]" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-users mr-3"></i> Manage Customer
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managefeedback']"
+            class="flex items-center p-2 rounded hover:bg-[#3C3D37]" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-comment-alt mr-3"></i> Manage Feedback
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managecontent']" 
+            class="flex items-center p-2 rounded hover:bg-[#3C3D37]"
+           routerLinkActive="active-nav">
+          <i class="fas fa-file-alt mr-3"></i> Manage Content
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managereport']" 
+            class="flex items-center p-2 rounded hover:bg-[#3C3D37]"
+           routerLinkActive="active-nav">
+          <i class="fas fa-chart-bar mr-3"></i> Manage Report
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="pt-4 border-t border-blue-700">
+    <a [routerLink]="['/adminprofile']"  class="flex items-center p-2 rounded hover:bg-[#3C3D37] cursor-pointer">
+      <i class="mr-3"> <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 dark:bg-gray-600 overflow-hidden">
+          <img 
+            src="https://randomuser.me/api/portraits/men/22.jpg" 
+            alt="Admin" 
+            class="w-full h-full object-cover"
+          >
+        </div></i> Profile
+    </a>
+    <a [routerLink]="['/helpcenter']" class="flex items-center p-2 rounded hover:bg-[#3C3D37] cursor-pointer">
+      <i class="fas fa-question-circle mr-3"></i> Help Center
+    </a>
+    <a (click)="openLogoutConfirmation()" class="flex items-center p-2 rounded hover:bg-[#3C3D37] cursor-pointer">
+      <i class="fas fa-sign-out-alt mr-3"></i> Logout
+    </a>
+  </div>
+</div>
+
+<!-- Mobile sidebar toggle -->
+<div class="md:hidden fixed top-4 left-4 z-50">
+  <button (click)="toggleMobileSidebar()" class="p-2 rounded-md bg-amber-200 text-white">
+    <i class="fas fa-bars"></i>
+  </button>
+</div>
+
+<!-- Mobile sidebar -->
+<div [class]="isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+     class="fixed inset-0 bg-black text-white p-4 z-40 transform transition-transform duration-300 md:hidden flex flex-col">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-2xl font-bold">Admin</h1>
+      <p class="text-sm text-blue-200">admin&#64;gmail.com</p>
+    </div>
+    <button (click)="closeMobileSidebar()" class="p-2">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  
+  <nav class="flex-1">
+    <h2 class="text-lg font-semibold mb-2">Dashboard</h2>
+    <ul class="space-y-2">
+      <li>
+        <a [routerLink]="['/dashboard']" 
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200 active-nav" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managebooking']" 
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-calendar-check mr-3"></i> Manage Booking
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managerooms']" 
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-bed mr-3"></i> Manage Rooms
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managecustomer']" 
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-users mr-3"></i> Manage Customer
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managefeedback']" 
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-comment-alt mr-3"></i> Manage Feedback
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managecontent']" 
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-file-alt mr-3"></i> Manage Content
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/managereport']"  
+           (click)="closeMobileSidebar()" 
+           class="flex items-center p-2 rounded hover:bg-amber-200" 
+           routerLinkActive="active-nav">
+          <i class="fas fa-chart-bar mr-3"></i> Manage Report
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="pt-4 border-t border-blue-700">
+    <a [routerLink]="['/adminprofile']"  class="flex items-center p-2 rounded hover:bg-[#3C3D37] cursor-pointer">
+      <i class="mr-3"> <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-300 dark:bg-gray-600 overflow-hidden">
+          <img 
+            src="https://randomuser.me/api/portraits/men/22.jpg" 
+            alt="Admin" 
+            class="w-full h-full object-cover"
+          >
+        </div></i> Profile
+    </a>
+    <a [routerLink]="['/helpcenter']" class="flex items-center p-2 rounded hover:bg-[#3C3D37] cursor-pointer">
+      <i class="fas fa-question-circle mr-3"></i> Help Center
+    </a>
+    <a (click)="openLogoutConfirmation()" class="flex items-center p-2 rounded hover:bg-[#3C3D37] cursor-pointer">
+      <i class="fas fa-sign-out-alt mr-3"></i> Logout
+    </a>
+  </div>
+</div>
+
+<!-- Logout Confirmation Modal -->
+<div *ngIf="showLogoutConfirmation" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-800">Confirm Logout</h2>
+      <button (click)="cancelLogout()" class="text-gray-500 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    
+    <div class="mb-6">
+      <p class="text-gray-700">Are you sure you want to logout?</p>
+    </div>
+    
+    <div class="flex justify-end space-x-2">
+      <button 
+        type="button" 
+        (click)="cancelLogout()"
+        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+        Cancel
+      </button>
+      <button 
+        type="button" 
+        (click)="confirmLogout()"
+        class="bg-[#1E201E] hover:bg-[#313531] text-white font-bold py-2 px-4 rounded">
+        Logout
+      </button>
+    </div>
+  </div>
+</div>

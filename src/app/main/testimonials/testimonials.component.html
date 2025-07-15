@@ -1,0 +1,43 @@
+<section id="feedback" class="py-12 bg-secondary">
+    <div class="container mx-auto px-4">
+      <h2 class="text-center text-secondary text-3xl md:text-4xl font-bold italic mb-4">Guest Feedback</h2>
+      <p class="text-center text-secondary text-xl mb-8 max-w-2xl mx-auto">What our valued guests say about their experience</p>
+      <div class="relative h-96 overflow-hidden rounded-lg">
+        <div class="relative h-full">
+          <div *ngFor="let testimonial of testimonials; let i = index" 
+               class="feedback-slide " 
+               [class.active]="currentTestimonial === i">
+            <div class="absolute inset-0 z-0 blur-sm" 
+                 [style.background-image]="'url(' + testimonial.backgroundImage + ')'"
+                 style="background-size:cover;background-position:center;"></div>
+            <div class="absolute inset-0 bg-opacity-50 flex flex-col justify-center items-center text-white p-8 z-10">
+              <div class="text-center max-w-2xl">
+                <p class="text-2xl italic mb-6">{{testimonial.quote}}</p>
+                <div class="flex items-center justify-center">
+                  <div class="w-12 h-12 rounded-full bg-primary mr-4 overflow-hidden">
+                    <img [src]="testimonial.avatar" [alt]="testimonial.name" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <p class="text-primary font-bold">{{testimonial.name}}</p>
+                    <p class="text-sm">{{testimonial.title}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="prevTestimonial()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-70 transition-all z-10">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button (click)="nextTestimonial()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-70 transition-all z-10">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center z-10">
+          <span *ngFor="let testimonial of testimonials; let i = index" 
+                class="feedback-dot" 
+                [class.active]="currentTestimonial === i"
+                (click)="goToTestimonial(i)"></span>
+        </div>
+      </div>
+    </div>
+  </section>

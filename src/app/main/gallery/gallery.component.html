@@ -1,0 +1,46 @@
+<section id="gallery" class="py-12 bg-[#1c1c1c]">
+    <div class="container mx-auto px-4">
+      <div class="py-5">
+        <h2 class="text-center text-white text-3xl md:text-4xl font-bold italic mb-4">Gallery</h2>
+        <p class="text-center text-[#f8b84e] text-xl mb-8 max-w-2xl mx-auto">Explore our beautiful spaces and amenities</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <img *ngFor="let image of images" 
+               [src]="image" 
+               alt="Hotel Image" 
+               class="w-full h-40 md:h-56 object-cover rounded-md hover:opacity-90 transition-all duration-300 cursor-pointer hover:scale-[1.02]"
+               (click)="openLightbox(image)">
+        </div>
+        <div class="text-center mt-8">
+          <button class="font-bold rounded-full px-6 py-2 transition-all duration-300 bg-gradient-to-r from-[#e7cf4b] to-[#d79b2b] text-[#1c1c1c] hover:bg-[#e9a83e] hover:-translate-y-0.5">
+            View More Photos
+          </button>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div *ngIf="showLightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4 transition-opacity duration-300" (click)="closeLightbox()">
+    <div class="relative max-w-4xl w-full">
+      <button class="absolute top-4 right-4 text-white text-3xl z-10 hover:text-[#f8b84e] transition-colors duration-300" 
+              (click)="closeLightbox($event)">
+        &times;
+      </button>
+      <img [src]="selectedImage" class="w-full max-h-screen object-contain" (click)="$event.stopPropagation()">
+      
+      <!-- Navigation Arrows -->
+      <button class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl z-10 hover:text-[#f8b84e] transition-colors duration-300"
+              (click)="prevImage($event)">
+        &larr;
+      </button>
+      <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl z-10 hover:text-[#f8b84e] transition-colors duration-300"
+              (click)="nextImage($event)">
+        &rarr;
+      </button>
+      
+      <!-- Image Counter -->
+      <div class="absolute bottom-4 left-0 right-0 text-center text-white">
+        {{currentImageIndex + 1}} / {{images.length}}
+      </div>
+    </div>
+</div>

@@ -1,0 +1,117 @@
+/* Animation for counting numbers */
+.animate-count {
+  transition: all 0.5s ease-out;
+}
+
+/* Hover effects for cards */
+.hover\:shadow-lg:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.grd-clr {
+    background: rgba(255, 255, 255, 0.314);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    color: white;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Add these styles to your CSS file */
+.glass-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Optional: Add a subtle gradient background to the container */
+.grid-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+/* Button animation */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+}
+
+.blink-button {
+  animation: pulse 2s infinite;
+}
+
+/* Pulse animation for urgent notices */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 1.5s infinite;
+}
+
+/* Blinking animation for buttons */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.blink {
+  animation: blink 2s infinite;
+}
+
+/* Chart container styling */
+.border-2 {
+  border-width: 2px;
+}
+
+.border-\[\#10B981\] {
+  border-color: #10B981;
+}
+
+.border-\[\#4CAF50\] {
+  border-color: #4CAF50;
+}
+
+/* Visualize button transitions */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Loyalty card border */
+.loyalty-card {
+  border: 2px solid #FFB300;
+  border-radius: 0.5rem;
+}
+
+/* Savings card border */
+.savings-card {
+  border: 2px solid #4CAF50;
+  border-radius: 0.5rem;
+}
+
+/* Booking card border */
+.booking-card {
+  border: 2px solid #42A5F5;
+  border-radius: 0.5rem;
+}
+
+/* Blinking button effect */
+.blink-button {
+  animation: blink 1.5s infinite;
+}

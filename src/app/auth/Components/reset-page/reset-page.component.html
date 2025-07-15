@@ -1,0 +1,91 @@
+<div class="relative z-10" >
+<main class="container mx-auto my-8 px-4 flex justify-center">
+  <div class="w-full max-w-lg">
+    <button 
+      routerLink="/" 
+      class="flex items-center text-[#040404] hover:text-[#d79b2b] mb-8 transition-colors">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5 mr-2" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-medium">Back to Home</span>
+    </button>
+    <div class="bg-black p-8 rounded-lg shadow-xl relative min-h-[500px]">
+      <h2 class="text-header text-center text-3xl mb-6 font-semibold">New Password</h2>
+      <div class="container-div p-8 rounded-lg space-y-4">
+        <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+          <!-- OTP Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-800 mb-1">OTP<span class="text-red-600">*</span></label>
+            <input type="text" formControlName="otp" placeholder="Enter 6-digit OTP" 
+                   class="w-full px-4 py-2 rounded bg-white text-gray-800 focus:ring-2 focus:ring-hotel-black focus:outline-none"
+                   maxlength="6">
+            @if (passwordForm.get('otp')?.invalid && (passwordForm.get('otp')?.dirty || passwordForm.get('otp')?.touched)) {
+              <div class="text-red-500 text-xs mt-1">
+                @if (passwordForm.get('otp')?.errors?.['required']) {
+                  <div>OTP is required</div>
+                }
+                @if (passwordForm.get('otp')?.errors?.['pattern']) {
+                  <div>OTP must be 6 digits</div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- New Password Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-800 mb-1">New Password<span class="text-red-600">*</span></label>
+            <input type="password" formControlName="newPassword" placeholder="Enter new password" 
+                   class="w-full px-4 py-2 rounded bg-white text-gray-800 focus:ring-2 focus:ring-hotel-black focus:outline-none">
+            @if (passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.dirty || passwordForm.get('newPassword')?.touched)) {
+              <div class="text-red-500 text-xs mt-1">
+                @if (passwordForm.get('newPassword')?.errors?.['required']) {
+                  <div>Password is required</div>
+                }
+                @if (passwordForm.get('newPassword')?.errors?.['minlength']) {
+                  <div>Password must be at least 8 characters</div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-800 mb-1">Confirm Password<span class="text-red-600">*</span></label>
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm new password" 
+                   class="w-full px-4 py-2 rounded bg-white text-gray-800 focus:ring-2 focus:ring-hotel-black focus:outline-none">
+            @if (passwordForm.get('confirmPassword')?.invalid && (passwordForm.get('confirmPassword')?.dirty || passwordForm.get('confirmPassword')?.touched)) {
+              <div class="text-red-500 text-xs mt-1">
+                @if (passwordForm.get('confirmPassword')?.errors?.['required']) {
+                  <div>Please confirm your password</div>
+                }
+              </div>
+            }
+            @if (passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.dirty) {
+              <div class="text-red-500 text-xs mt-1">Passwords do not match</div>
+            }
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="pt-4 flex gap-4">
+            <a routerLink="/forgot-password" class="flex-1 bg-black text-white px-6 py-3 rounded-md hover:bg-opacity-90 font-medium text-center">
+              Back
+            </a>
+            <button type="submit" [disabled]="!passwordForm.valid"
+                    class="flex-1 bg-black text-white px-6 py-3 rounded-md hover:bg-opacity-90 font-medium">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+<div class="fixed inset-0  h-full z-0">
+  <img src="assets/image2.jpg" alt="Background" class="w-full h-full object-cover " />
+</div>
