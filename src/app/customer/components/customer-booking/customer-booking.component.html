@@ -248,57 +248,57 @@ Cancelled
 <!-- Modify Booking Modal -->
 @if (showModifyModal && selectedBooking) {
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg w-full max-w-2xl text-white">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg w-full max-w-2xl ">
       <div class="flex justify-between items-center border-b border-white/20 p-4">
         <h3 class="text-xl font-bold text-white">Modify Booking</h3>
         <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="p-6 text-white">
+      <div class="p-6 text-black">
         <form (ngSubmit)="submitModificationRequest()">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block text-white/80 mb-2">Room Type</label>
-              <select [(ngModel)]="modificationRequest.roomType" name="roomType" class="w-full p-2 border rounded bg-white/10 text-white" (change)="onModifyFieldChange()">
-                <option *ngFor="let type of roomTypes" [value]="type">{{ type }}</option>
+              <label class="block  text-white/80 mb-2">Room Type</label>
+              <select [(ngModel)]="modificationRequest.roomType" name="roomType" class="w-full p-2 border rounded bg-amber-50 text-black" (change)="onModifyFieldChange()">
+                <option *ngFor="let type of roomTypes" [value]="type" class="text-black">{{ type }}</option>
               </select>
             </div>
             <div>
               <label class="block text-white/80 mb-2">Room Number</label>
-              <select [(ngModel)]="modificationRequest.roomNumber" name="roomNumber" class="w-full p-2 border rounded bg-white/10 text-white">
-                <option value="">Select Room</option>
-                <option *ngFor="let num of availableRoomNumbers" [value]="num">{{ num }}</option>
+              <select [(ngModel)]="modificationRequest.roomNumber" name="roomNumber" class="w-full p-2 border rounded bg-amber-50 text-black">
+                <option value="" class="text-black">Select Room</option>
+                <option *ngFor="let num of availableRoomNumbers" [value]="num" class="text-black">{{ num }}</option>
               </select>
             </div>
             <div>
               <label class="block text-white/80 mb-2">Check In Date</label>
               <input [(ngModel)]="modificationRequest.checkIn" name="checkIn" type="date" 
-                     [min]="formatDateForInput(today)" class="w-full p-2 border rounded bg-white/10 text-white" (change)="onModifyFieldChange()">
+                     [min]="formatDateForInput(today)" class="w-full p-2 border rounded bg-amber-50 " (change)="onModifyFieldChange()">
             </div>
             <div>
               <label class="block text-white/80 mb-2">Check Out Date</label>
               <input [(ngModel)]="modificationRequest.checkOut" name="checkOut" type="date" 
-                     [min]="modificationRequest.checkIn || formatDateForInput(today)" class="w-full p-2 border rounded bg-white/10 text-white" (change)="onModifyFieldChange()">
+                     [min]="modificationRequest.checkIn || formatDateForInput(today)" class="w-full p-2 border rounded bg-amber-50 " (change)="onModifyFieldChange()">
             </div>
             <div>
               <label class="block text-white/80 mb-2">Adults</label>
-              <input [(ngModel)]="modificationRequest.adults" name="adults" type="number" min="1" max="10" class="w-full p-2 border rounded bg-white/10 text-white" required>
+              <input [(ngModel)]="modificationRequest.adults" name="adults" type="number" min="1" max="10" class="w-full p-2 border rounded bg-amber-50 " required>
             </div>
             <div>
               <label class="block text-white/80 mb-2">Children</label>
-              <input [(ngModel)]="modificationRequest.children" name="children" type="number" min="0" max="10" class="w-full p-2 border rounded bg-white/10 text-white">
+              <input [(ngModel)]="modificationRequest.children" name="children" type="number" min="0" max="10" class="w-full p-2 border rounded bg-amber-50 ">
             </div>
           </div>
           <div class="mb-4">
             <label class="block text-white/80 mb-2">Additional Notes</label>
-            <textarea [(ngModel)]="modificationRequest.message" name="message" rows="3" class="w-full p-2 border rounded bg-white/10 text-white"></textarea>
+            <textarea [(ngModel)]="modificationRequest.message" name="message" rows="3" class="w-full p-2 border rounded bg-amber-50 "></textarea>
           </div>
           <div class="border-t pt-4 flex justify-end space-x-2">
-            <button type="button" (click)="closeModal()" class="px-4 py-2 bg-white/10 text-white rounded hover:bg-white/20 transition">
+            <button type="button" (click)="closeModal()" class="px-4 py-2 bg-white/10  rounded hover:bg-white/20 transition">
               Cancel
             </button>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+            <button type="submit" class="px-4 py-2 bg-blue-600  rounded hover:bg-blue-700 transition">
               Submit
             </button>
           </div>

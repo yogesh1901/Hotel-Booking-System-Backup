@@ -1,5 +1,6 @@
 // login.component.ts
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -26,7 +27,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder, 
     public router: Router,
-    public authService: AuthService
+    public authService: AuthService,
+    private route: ActivatedRoute
   ) {
     
 
@@ -69,15 +71,22 @@ export class LoginComponent {
       this.rememberMe = remember;
       this.loginError = '';
       if (this.authService.login(username, password)) {
-        // Always redirect to home page after login as user
         const user = this.authService.getCurrentUser();
-        // Check for redirect after login (e.g., from Book Now)
-        const redirect = this.router.getCurrentNavigation()?.extras?.queryParams?.['redirect'];
-        const intendedRoomId = sessionStorage.getItem('intendedRoomId');
-        if (redirect === 'room-booking' && intendedRoomId) {
-          // Go to room booking page and auto-select the room
-          this.router.navigate(['/room-booking'], { queryParams: { roomId: intendedRoomId } });
-          sessionStorage.removeItem('intendedRoomId');
+        // Always use ActivatedRoute for query params
+        const queryParams = this.route.snapshot.queryParams;
+        const redirect = queryParams['redirect'];
+        const intendedRoomNumber = sessionStorage.getItem('intendedRoomNumber');
+        if (redirect === 'booking-form' && intendedRoomNumber) {
+          // Pass all booking params if available
+          const params: any = {
+            roomNumber: intendedRoomNumber
+          };
+          if (queryParams['checkIn']) params.checkIn = queryParams['checkIn'];
+          if (queryParams['checkOut']) params.checkOut = queryParams['checkOut'];
+          if (queryParams['adults']) params.adults = queryParams['adults'];
+          if (queryParams['children']) params.children = queryParams['children'];
+          this.router.navigate(['/booking-form'], { queryParams: params });
+          sessionStorage.removeItem('intendedRoomNumber');
         } else if (user?.role === 'admin') {
           this.router.navigate(['/dashboard']);
         } else {

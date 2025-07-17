@@ -169,6 +169,12 @@ export class RoombookingComponent implements OnInit {
         this.currentBooking.checkOut = params['checkOut'];
         this.applyDates();
       }
+      if (params['adults']) {
+        this.currentBooking.adults = +params['adults'];
+      }
+      if (params['children']) {
+        this.currentBooking.children = +params['children'];
+      }
       if (params['guests']) {
         // You can use this to filter rooms by capacity
       }
@@ -200,6 +206,8 @@ export class RoombookingComponent implements OnInit {
     if (params['guestName']) this.currentBooking.guestInfo.name = params['guestName'];
     if (params['guestEmail']) this.currentBooking.guestInfo.email = params['guestEmail'];
     if (params['guestPhone']) this.currentBooking.guestInfo.phone = params['guestPhone'];
+    if (params['adults']) this.currentBooking.adults = +params['adults'];
+    if (params['children']) this.currentBooking.children = +params['children'];
     // Default to 'self' if logged in, else 'other'
     this.bookingFor = this.authService.isAuthenticated() ? 'self' : 'other';
     // Always refresh guest info for 'self' on init
